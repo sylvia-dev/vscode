@@ -1,0 +1,16 @@
+
+How to run the Python script in VSCode and output a CSV with current reviews
+
+
+1) Navigate to G2 and copy the html on all pages with reviews from this div (nested-ajax-loading) from each page
+2) Paste into plain text file(s) with the dates (eg: "g2_1_20241113.txt")
+3) Open VSCode and navigate to the directory of choice: trustpilot/g2 cj/g2
+4) Open the .py script from inside the G2 folder (scraper csv 2024-11-13)
+5) Navigate to the bottom of the script and update the downloaded text file names:
+
+# Define input files
+input_files = ["g2_1_20241113.txt", "g2_2_20241113.txt", "g2_3_20241113.txt"] 
+
+6) Save the script
+7) Click the run button on the top-right 
+8) find the css, which will be named "cj_affiliate_reviews_yyyy_mm_dd.csv"
