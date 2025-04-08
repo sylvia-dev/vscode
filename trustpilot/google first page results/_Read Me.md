@@ -1,39 +1,46 @@
-
-google_scraper_reviews_final.py"
-
 # Google Scraper Documentation
 
-## Overview of Different Scrapers
+## Overview
+This collection of Python scripts scrapes Google search results for various affiliate networks, focusing on reviews, ratings, and company information. The scripts are designed to gather comprehensive data about affiliate networks' online presence and reputation.
 
-1. **google_scraper_reviews_final.py**
-   - Basic review scraper
-   - Focuses on ratings and review information
-   - Output: `affiliate_network_reviews_YYYY-MM-DD.csv`
-   - Core fields: position, review site, ratings, review counts, snippets
+## Available Scrapers
 
-2. **google_scraper_companyinfo_final2.py**
-   - Company information scraper
-   - Focuses on additional search data
-   - Output: `affiliate_network_companyinfo2.csv`
-   - Core fields: videos, discussions, people also ask/search, sponsored content
+### 1. Basic Review Scraper (`google_scraper_reviews_final.py`)
+- **Purpose**: Extracts basic review and rating information
+- **Output File**: `affiliate_network_reviews_YYYY-MM-DD.csv`
+- **Key Fields**:
+  - Position in search results
+  - Review site information
+  - Ratings and review counts
+  - Search result snippets
 
-3. **google_scraper_complete.py**
-   - Combined comprehensive scraper
-   - Includes all features from both scrapers above
-   - Output: `affiliate_network_complete_YYYY-MM-DD.csv`
-   - All fields from both scrapers combined
+### 2. Company Information Scraper (`google_scraper_companyinfo_final2.py`)
+- **Purpose**: Gathers additional company-related search data
+- **Output File**: `affiliate_network_companyinfo2.csv`
+- **Key Fields**:
+  - Video content
+  - Discussion forums
+  - "People also ask" questions
+  - Sponsored content
 
-## Prerequisites
+### 3. Complete Scraper (`google_scraper_complete.py`)
+- **Purpose**: Comprehensive data collection combining all features
+- **Output File**: `affiliate_network_complete_YYYY-MM-DD.csv`
+- **Features**: All data from both basic and company information scrapers
+
+## Setup and Installation
+
+### Prerequisites
 - Python 3.7 or higher
 - pip (Python package manager)
 
-## Required Python Packages
+### Required Packages
 ```bash
 pip install requests beautifulsoup4
 ```
 
-## Configuration
-All scripts search for the following affiliate networks:
+### Configuration
+The scripts search for the following affiliate networks:
 - CJ (Commission Junction)
 - ShareASale
 - ClickBank
@@ -47,107 +54,103 @@ Search terms used:
 - "ratings"
 - " " (blank search)
 
-## Data Fields by Scraper
+## Data Fields
 
-### google_scraper_reviews_final.py
-- position
-- company
-- search_term
-- review_site
-- title
-- link
-- snippet
-- rating
-- rating_threshold
-- reviews
-- rating2
+### Review Scraper Fields
+| Field | Description |
+|-------|-------------|
+| position | Search result position |
+| company | Affiliate network name |
+| search_term | Search query used |
+| review_site | Source of the review |
+| title | Search result title |
+| link | URL of the result |
+| snippet | Search result description |
+| rating | Numerical rating |
+| rating_threshold | Rating scale (e.g., out of 5) |
+| reviews | Number of reviews |
+| rating2 | Additional rating metric |
 
-### google_scraper_companyinfo_final2.py
-- company
-- search_term
-- url
-- people_also_search
-- people_also_search_companies
-- videos (title, channel, duration, date)
-- people_also_ask
-- discussions_forums (title, name, date)
-- sponsored_info (company, url, title)
+### Company Info Scraper Fields
+| Field | Description |
+|-------|-------------|
+| people_also_search | Related search terms |
+| people_also_search_companies | Related companies |
+| videos | Video content details |
+| people_also_ask | Related questions |
+| discussions_forums | Forum discussions |
+| sponsored_info | Sponsored content details |
 
-### google_scraper_complete.py
-All fields from both scrapers above, plus:
-- Combined review and company information
-- Enhanced video tracking
-- Full discussion forum details
-- Complete sponsored content information
+## Usage
 
-## Running the Scripts
+### Running the Scripts
 
-### Basic Review Scraper
+1. **Basic Review Scraper**:
 ```bash
-/usr/bin/python3 "/Users/sylking/Documents/VCode/trustpilot/google first page results/google_scraper_reviews_final.py"
+python "google_scraper_reviews_final.py"
 ```
 
-### Company Info Scraper
+2. **Company Info Scraper**:
 ```bash
-/usr/bin/python3 "/Users/sylking/Documents/VCode/trustpilot/google first page results/google_scraper_companyinfo_final2.py"
+python "google_scraper_companyinfo_final2.py"
 ```
 
-### Complete Scraper
+3. **Complete Scraper**:
 ```bash
-/usr/bin/python3 "/Users/sylking/Documents/VCode/trustpilot/google first page results/google_scraper_complete.py"
+python "google_scraper_complete.py"
 ```
 
 ## Output Files
 
-### Review Scraper
-- Creates: `affiliate_network_reviews_YYYY-MM-DD.csv`
-- Focus: Review metrics and ratings
+### File Naming Convention
+- Review Scraper: `affiliate_network_reviews_YYYY-MM-DD.csv`
+- Company Info: `affiliate_network_companyinfo2.csv`
+- Complete Scraper: `affiliate_network_complete_YYYY-MM-DD.csv`
 
-### Company Info Scraper
-- Creates: `affiliate_network_companyinfo2.csv`
-- Focus: Additional search information and company details
+## Technical Details
 
-### Complete Scraper
-- Creates: `affiliate_network_complete_YYYY-MM-DD.csv`
-- Focus: All available data combined
-
-## Rate Limiting and Safety Features
+### Rate Limiting
 - Random delays (1-3 seconds) between requests
-- SSL warning suppression
-- Error handling for missing elements
-- Continues to next item if a search fails
-
-## Implementation Notes
+- Configurable through `time.sleep()` values
 
 ### Error Handling
-- All scripts ignore urllib3 warnings
-- Graceful handling of missing data fields
-- Continues processing if individual elements aren't found
+- SSL warning suppression
+- Graceful handling of missing elements
+- Continues processing if individual elements fail
 
 ### Data Processing
-- Reviews script: Focuses on numerical data extraction
-- Company info script: Handles complex nested data
-- Complete script: Combines both with enhanced structure
+- Reviews: Focuses on numerical data extraction
+- Company info: Handles complex nested data
+- Complete: Combines both with enhanced structure
 
-### Best Practices
-- Consider implementing proxy rotation for production use
+## Best Practices
+
+### Production Use
+- Implement proxy rotation for large-scale scraping
 - Monitor Google's robots.txt and terms of service
 - Adjust delay times based on your needs
-- Back up data regularly
+- Regular data backups recommended
 
-## Common Issues and Solutions
+### Common Issues and Solutions
 
-1. SSL Warnings
-   - Handled automatically in the latest versions
+1. **SSL Warnings**
+   - Handled automatically in latest versions
    - Can be suppressed using provided warning filters
 
-2. Rate Limiting
+2. **Rate Limiting**
    - Adjust `time.sleep()` values if needed
    - Consider implementing proxy rotation
 
-3. Missing Data
+3. **Missing Data**
    - Scripts handle missing elements gracefully
    - Check CSV output for completeness
+
+## Future Improvements
+- [ ] Add proxy support
+- [ ] Implement concurrent requests
+- [ ] Add data validation
+- [ ] Enhanced error reporting
+- [ ] Support for additional search engines
 
 ## Notes
 - Google may block requests if too many are made in a short time
@@ -155,10 +158,6 @@ All fields from both scrapers above, plus:
 - Results may vary based on Google's search algorithm updates
 - Always respect robots.txt and terms of service
 
-## Future Improvements
-- Add proxy support
-- Implement concurrent requests
-- Add data validation
-- Enhanced error reporting
-- Support for additional search engines
+## Contributing
+Feel free to submit issues and enhancement requests!
 
