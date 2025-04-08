@@ -1,10 +1,9 @@
 import warnings
 import urllib3
-
-# Suppress the specific NotOpenSSLWarning
-warnings.filterwarnings('ignore', category=urllib3.exceptions.NotOpenSSLWarning)
-
+from urllib.parse import urlparse
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 from bs4 import BeautifulSoup
 import csv
 import time
@@ -13,13 +12,47 @@ import re
 import os
 from datetime import datetime
 
+# Suppress the specific NotOpenSSLWarning
+warnings.filterwarnings('ignore', category=urllib3.exceptions.NotOpenSSLWarning)
+
+def create_session():
+    session = requests.Session()
+    retry_strategy = Retry(
+        total=3,
+        backoff_factor=1,
+        status_forcelist=[429, 500, 502, 503, 504],
+    )
+    adapter = HTTPAdapter(max_retries=retry_strategy)
+    session.mount("http://", adapter)
+    session.mount("https://", adapter)
+    return session
+
+def is_valid_url(url):
+    try:
+        result = urlparse(url)
+        return all([result.scheme, result.netloc])
+    except ValueError:
+        return False
+
 def get_google_search_results(query):
     url = f"https://www.google.com/search?q={query.replace(' ', '+')}"
+    if not is_valid_url(url):
+        raise ValueError("Invalid URL generated")
+        
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
     }
-    response = requests.get(url, headers=headers)
-    return response.text, url
+    
+    session = create_session()
+    try:
+        response = session.get(url, headers=headers, verify=True, timeout=30)
+        response.raise_for_status()
+        return response.text, url
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching search results: {e}")
+        raise
+    finally:
+        session.close()
 
 def parse_search_results(html_content, company, search_term, url):
     soup = BeautifulSoup(html_content, 'html.parser')
